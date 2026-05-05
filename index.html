@@ -1,0 +1,1534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cosmic Solutions — Strategy written in the stars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --bg:        #0A0815;
+  --bg-mid:    #1E1638;
+  --crimson:   #7A2A3A;
+  --smoke-blue:#2A4A6E;
+  --cream:     #F4EFE8;
+  --ember:     #D4622A;
+  --cream-70:  rgba(244,239,232,0.72);
+  --cream-50:  rgba(244,239,232,0.50);
+  --cream-30:  rgba(244,239,232,0.30);
+  --cream-15:  rgba(244,239,232,0.15);
+  --ease:      cubic-bezier(0.25,0.46,0.45,0.94);
+}
+
+/* ============================================================
+   COSMIC LOADER
+   ============================================================ */
+#loader{
+  position:fixed;inset:0;z-index:99999;
+  background:#0A0815;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  transition:opacity 1.1s cubic-bezier(0.4,0,1,1),visibility 1.1s;
+}
+#loader.ld-out{opacity:0;visibility:hidden;pointer-events:none;}
+
+/* Stars layers */
+.ld-stars{
+  position:absolute;inset:0;z-index:0;opacity:.75;
+  background-image:
+    radial-gradient(1px 1px at 7% 9%,#fff 50%,transparent 60%),
+    radial-gradient(1.2px 1.2px at 14% 41%,#f6e7d0 50%,transparent 60%),
+    radial-gradient(1px 1px at 23% 73%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 31% 18%,#ffd9a8 50%,transparent 60%),
+    radial-gradient(1.4px 1.4px at 40% 88%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 47% 54%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 56% 14%,#f6e7d0 50%,transparent 60%),
+    radial-gradient(1.2px 1.2px at 63% 67%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 71% 33%,#ffd9a8 50%,transparent 60%),
+    radial-gradient(1px 1px at 80% 82%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 86% 24%,#fff 50%,transparent 60%),
+    radial-gradient(1.2px 1.2px at 93% 57%,#f6e7d0 50%,transparent 60%),
+    radial-gradient(1px 1px at 97% 92%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 4% 95%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 51% 3%,#ffd9a8 50%,transparent 60%),
+    radial-gradient(1px 1px at 19% 60%,#fff 50%,transparent 60%),
+    radial-gradient(1.3px 1.3px at 35% 30%,#f6e7d0 50%,transparent 60%),
+    radial-gradient(1px 1px at 74% 50%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 88% 5%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 60% 40%,#ffd9a8 50%,transparent 60%);
+  animation:twinkle 5s ease-in-out infinite alternate;
+}
+.ld-stars-2{
+  position:absolute;inset:0;z-index:0;opacity:.4;
+  background-image:
+    radial-gradient(1px 1px at 10% 55%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 26% 7%,#f6e7d0 50%,transparent 60%),
+    radial-gradient(1.2px 1.2px at 43% 46%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 61% 91%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 75% 11%,#ffd9a8 50%,transparent 60%),
+    radial-gradient(1px 1px at 89% 72%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 33% 78%,#f6e7d0 50%,transparent 60%),
+    radial-gradient(1.2px 1.2px at 55% 25%,#fff 50%,transparent 60%);
+  animation:twinkle 8s ease-in-out 1.5s infinite alternate;
+}
+
+/* Nebula glow */
+.ld-nebula{
+  position:absolute;inset:-25%;z-index:0;
+  background:
+    radial-gradient(ellipse 40% 32% at 18% 32%,rgba(122,42,58,.5),transparent 65%),
+    radial-gradient(ellipse 35% 28% at 82% 68%,rgba(42,74,110,.42),transparent 65%),
+    radial-gradient(ellipse 28% 20% at 62% 18%,rgba(122,42,58,.28),transparent 62%),
+    radial-gradient(ellipse 30% 24% at 30% 80%,rgba(42,74,110,.22),transparent 60%);
+  filter:blur(40px);
+  animation:drift 14s ease-in-out infinite alternate;
+}
+
+/* ── Meteor shower ─────────────────────────────────────────── */
+/* Rotated container: children fall "down" but appear diagonal */
+.ld-meteors{
+  position:absolute;inset:-80%;z-index:1;
+  transform:rotate(-32deg);pointer-events:none;
+}
+.ld-m{
+  position:absolute;top:0;height:1.5px;border-radius:2px;opacity:0;
+  background:linear-gradient(to right,
+    transparent 0%,
+    rgba(244,239,232,.05) 15%,
+    rgba(244,239,232,.70) 65%,
+    rgba(212,98,42,.55)   85%,
+    rgba(255,210,160,.9)  100%);
+  animation:ld-meteor linear infinite;
+}
+@keyframes ld-meteor{
+  0%  {transform:translateY(-4%);opacity:0;}
+  4%  {opacity:1;}
+  82% {opacity:.9;}
+  100%{transform:translateY(150%);opacity:0;}
+}
+/* 16 meteors — varied position, width, speed, delay */
+.ld-m:nth-child(1) {left:5%;  width:200px;animation-duration:2.9s;animation-delay:0.0s;}
+.ld-m:nth-child(2) {left:14%; width:130px;animation-duration:2.3s;animation-delay:1.2s;}
+.ld-m:nth-child(3) {left:22%; width:270px;animation-duration:3.1s;animation-delay:0.5s;}
+.ld-m:nth-child(4) {left:31%; width:160px;animation-duration:2.6s;animation-delay:2.1s;}
+.ld-m:nth-child(5) {left:41%; width:310px;animation-duration:2.1s;animation-delay:0.8s;}
+.ld-m:nth-child(6) {left:50%; width:145px;animation-duration:3.4s;animation-delay:1.6s;}
+.ld-m:nth-child(7) {left:59%; width:230px;animation-duration:2.7s;animation-delay:0.3s;}
+.ld-m:nth-child(8) {left:68%; width:185px;animation-duration:3.0s;animation-delay:2.5s;}
+.ld-m:nth-child(9) {left:77%; width:255px;animation-duration:2.4s;animation-delay:1.0s;}
+.ld-m:nth-child(10){left:86%; width:175px;animation-duration:2.8s;animation-delay:3.2s;}
+.ld-m:nth-child(11){left:10%; width:150px;animation-duration:3.5s;animation-delay:1.9s;}
+.ld-m:nth-child(12){left:36%; width:195px;animation-duration:2.2s;animation-delay:2.9s;}
+.ld-m:nth-child(13){left:54%; width:165px;animation-duration:3.3s;animation-delay:0.6s;}
+.ld-m:nth-child(14){left:72%; width:290px;animation-duration:2.5s;animation-delay:1.4s;}
+.ld-m:nth-child(15){left:43%; width:120px;animation-duration:2.0s;animation-delay:3.7s;}
+.ld-m:nth-child(16){left:90%; width:215px;animation-duration:3.6s;animation-delay:0.9s;}
+
+/* ── Central content ───────────────────────────────────────── */
+.ld-center{
+  position:relative;z-index:10;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:0;
+}
+
+/* Planet */
+.ld-planet-wrap{
+  position:relative;width:96px;height:96px;
+  margin-bottom:40px;
+}
+.ld-planet{
+  width:96px;height:96px;border-radius:50%;
+  background:radial-gradient(circle at 33% 30%,#ffe9cc 0%,#f0a566 15%,#d4622a 38%,#8a2e18 72%,#2a0d08 100%);
+  box-shadow:
+    0 0 0 1px rgba(212,98,42,.15),
+    0 0 30px rgba(212,98,42,.65),
+    0 0 70px rgba(212,98,42,.30),
+    0 0 130px rgba(212,98,42,.14),
+    inset 0 -8px 18px rgba(20,5,0,.7),
+    inset 6px 6px 14px rgba(255,225,195,.45);
+  overflow:hidden;
+  animation:ld-planet-pulse 3.5s ease-in-out infinite;
+}
+@keyframes ld-planet-pulse{
+  0%,100%{box-shadow:0 0 0 1px rgba(212,98,42,.15),0 0 30px rgba(212,98,42,.65),0 0 70px rgba(212,98,42,.30),0 0 130px rgba(212,98,42,.14),inset 0 -8px 18px rgba(20,5,0,.7),inset 6px 6px 14px rgba(255,225,195,.45);}
+  50%    {box-shadow:0 0 0 1px rgba(212,98,42,.20),0 0 50px rgba(212,98,42,.85),0 0 100px rgba(212,98,42,.45),0 0 180px rgba(212,98,42,.22),inset 0 -8px 18px rgba(20,5,0,.7),inset 6px 6px 14px rgba(255,225,195,.45);}
+}
+.ld-planet::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;mix-blend-mode:overlay;
+  background:linear-gradient(118deg,
+    transparent 0%,rgba(255,215,170,0) 22%,
+    rgba(130,44,26,.65) 27%,transparent 33%,
+    transparent 48%,rgba(255,195,130,.38) 53%,transparent 59%,
+    rgba(80,22,12,.65) 68%,transparent 74%);
+}
+/* 3-D orbital ring 1 — tilted plane, fast */
+.ld-orb-1{
+  position:absolute;
+  inset:-28%;
+  perspective:180px;
+  pointer-events:none;
+}
+.ld-orb-1-ring{
+  position:absolute;inset:0;
+  border:1px solid rgba(212,98,42,.45);
+  border-radius:50%;
+  transform:rotateX(72deg);
+  animation:ld-orbit-spin 3.2s linear infinite;
+  box-shadow:0 0 8px rgba(212,98,42,.2);
+}
+.ld-orb-1-ring::after{
+  content:"";position:absolute;
+  top:-4px;left:calc(50% - 4px);
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(244,239,232,.95);
+  box-shadow:0 0 12px rgba(212,98,42,.9),0 0 24px rgba(212,98,42,.5);
+}
+/* 3-D orbital ring 2 — different tilt & slower */
+.ld-orb-2{
+  position:absolute;inset:-36%;perspective:180px;pointer-events:none;
+  transform:rotate(55deg);
+}
+.ld-orb-2-ring{
+  position:absolute;inset:0;
+  border:1px solid rgba(42,74,110,.55);
+  border-radius:50%;
+  transform:rotateX(68deg);
+  animation:ld-orbit-spin 5.8s linear infinite reverse;
+}
+.ld-orb-2-ring::after{
+  content:"";position:absolute;
+  top:-3px;left:calc(50% - 3px);
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(180,210,244,.9);
+  box-shadow:0 0 10px rgba(42,74,110,.9),0 0 22px rgba(42,74,110,.5);
+}
+@keyframes ld-orbit-spin{
+  from{transform:rotateX(72deg) rotate(0deg);}
+  to  {transform:rotateX(72deg) rotate(360deg);}
+}
+
+/* Wordmark */
+.ld-name{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 144;
+  font-size:27px;letter-spacing:.04em;color:var(--cream);
+  margin-bottom:7px;
+  opacity:0;animation:ld-rise .9s var(--ease) .2s forwards;
+}
+.ld-eyebrow{
+  font-size:10px;text-transform:uppercase;letter-spacing:.38em;
+  color:var(--cream-50);margin-bottom:38px;
+  opacity:0;animation:ld-rise .9s var(--ease) .4s forwards;
+}
+@keyframes ld-rise{
+  from{opacity:0;transform:translateY(14px);}
+  to  {opacity:1;transform:translateY(0);}
+}
+
+/* Progress bar */
+.ld-bar-wrap{
+  width:200px;height:1px;background:rgba(244,239,232,.10);
+  border-radius:1px;overflow:hidden;margin-bottom:16px;
+  opacity:0;animation:ld-rise .9s var(--ease) .6s forwards;
+}
+.ld-bar{
+  height:100%;width:0;
+  background:linear-gradient(90deg,rgba(212,98,42,.6),var(--ember),rgba(255,200,140,.9));
+  box-shadow:0 0 10px var(--ember);
+  animation:ld-progress 2.4s cubic-bezier(0.4,0,0.2,1) .9s forwards;
+}
+@keyframes ld-progress{from{width:0;}70%{width:70%;}to{width:100%;}}
+
+/* Status text */
+.ld-status{
+  font-size:10px;text-transform:uppercase;letter-spacing:.34em;color:var(--cream-30);
+  opacity:0;animation:ld-rise .9s var(--ease) .8s forwards;
+}
+.ld-status .ld-blink{color:var(--ember);animation:blink 1.3s steps(2) infinite;}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background: url('bg.png') center/cover fixed var(--bg);
+  color:var(--cream);
+  font-family:'Geist',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+img,video{display:block;}
+
+/* ============================================================
+   GLASS
+   ============================================================ */
+.glass{
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));
+  -webkit-backdrop-filter:blur(22px) saturate(140%);
+          backdrop-filter:blur(22px) saturate(140%);
+  border:1px solid transparent;background-clip:padding-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(255,255,255,.04),
+    0 12px 40px -12px rgba(0,0,0,.55),
+    0 0 0 1px rgba(255,255,255,.06);
+  position:relative;
+}
+.glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+
+/* ============================================================
+   FIXED NAV
+   ============================================================ */
+.nav-wrap{
+  position:fixed;top:22px;left:50%;transform:translateX(-50%);
+  z-index:100;display:flex;align-items:center;gap:10px;
+  padding:8px 8px 8px 22px;border-radius:999px;
+  min-width:min(740px,calc(100vw - 32px));
+}
+.nav-mark{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Fraunces',serif;font-size:15px;letter-spacing:.04em;color:var(--cream);
+}
+.nav-mark-glyph{
+  position:relative;width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 32% 30%,#ffe7c9 0%,#f0a566 18%,#d4622a 42%,#7a2a1a 78%,#2a0d08 100%);
+  box-shadow:0 0 14px rgba(212,98,42,.55),inset 0 -3px 6px rgba(20,5,0,.55),inset 2px 2px 4px rgba(255,230,200,.55);
+  overflow:hidden;
+}
+.nav-mark-glyph::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;mix-blend-mode:overlay;
+  background:linear-gradient(115deg,transparent 0%,rgba(255,220,180,0) 28%,rgba(122,42,26,.55) 32%,transparent 38%,transparent 52%,rgba(255,200,140,.30) 56%,transparent 62%,rgba(74,20,12,.55) 72%,transparent 78%);
+}
+.nav-mark-glyph::after{
+  content:"";position:absolute;left:-6px;right:-6px;top:50%;height:3px;border-radius:50%;
+  transform:translateY(-50%) rotate(-18deg);
+  background:linear-gradient(90deg,transparent 0%,rgba(244,239,232,.6) 20%,rgba(212,98,42,.7) 50%,rgba(244,239,232,.6) 80%,transparent 100%);
+  box-shadow:0 0 6px rgba(212,98,42,.5);
+  clip-path:polygon(0 0,100% 0,100% 45%,70% 45%,70% 55%,30% 55%,30% 45%,0 45%);
+}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:18px;}
+.nav-link{
+  font-size:11.5px;text-transform:uppercase;letter-spacing:.18em;
+  color:var(--cream-70);padding:8px 14px;border-radius:999px;
+  transition:color 220ms ease,background 220ms ease;
+}
+.nav-link:hover,.nav-link.active{color:var(--cream);background:rgba(255,255,255,.04);}
+.nav-cta{
+  margin-left:auto;font-size:11.5px;text-transform:uppercase;letter-spacing:.18em;
+  color:var(--cream);padding:9px 16px;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.14);
+  display:inline-flex;align-items:center;gap:8px;
+  transition:box-shadow 400ms ease,background 400ms ease;
+}
+.nav-cta:hover{
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.06));
+  box-shadow:0 0 24px rgba(212,98,42,.22),inset 0 1px 0 rgba(255,255,255,.3);
+}
+.nav-cta .dot{width:5px;height:5px;border-radius:50%;background:var(--ember);box-shadow:0 0 8px var(--ember);}
+
+/* ============================================================
+   FIXED SIDE RAIL
+   ============================================================ */
+.side-rail{
+  position:fixed;left:28px;top:50%;
+  transform:translateY(-50%) rotate(-90deg);transform-origin:left center;
+  z-index:50;display:flex;align-items:center;gap:18px;
+  font-size:10.5px;text-transform:uppercase;letter-spacing:.32em;color:var(--cream-50);
+}
+.side-rail .tick{width:24px;height:1px;background:var(--cream-30);}
+
+/* ============================================================
+   FIXED NAV INDEX
+   ============================================================ */
+.nav-index{
+  position:fixed;right:36px;top:50%;transform:translateY(-50%);
+  z-index:50;display:flex;flex-direction:column;gap:18px;
+  font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(--cream-50);
+}
+.idx-item{
+  display:flex;align-items:center;gap:12px;justify-content:flex-end;
+  cursor:pointer;transition:color 300ms ease;
+}
+.idx-item:hover{color:var(--cream);}
+.idx-item .num{font-family:'Fraunces',serif;font-size:11px;letter-spacing:0;color:var(--cream-30);transition:color 300ms ease;}
+.idx-item.active{color:var(--cream);}
+.idx-item.active .num{color:var(--ember);}
+.idx-item.active::after{content:"";width:18px;height:1px;background:var(--ember);}
+
+/* ============================================================
+   HERO STAGE
+   ============================================================ */
+.stage{
+  position:relative;width:100%;min-height:100vh;overflow:hidden;
+  background:radial-gradient(ellipse 90% 70% at 75% 50%,#1a1230 0%,var(--bg) 60%,#050309 100%);
+}
+
+/* — Video background — */
+.bg-video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:.42;z-index:0;pointer-events:none;
+}
+
+.nebula-layer{
+  position:absolute;inset:-10%;
+  background:
+    radial-gradient(ellipse 35% 28% at 22% 38%,rgba(122,42,58,.55),transparent 60%),
+    radial-gradient(ellipse 28% 22% at 38% 70%,rgba(42,74,110,.45),transparent 60%),
+    radial-gradient(ellipse 20% 16% at 8% 60%,rgba(122,42,58,.30),transparent 70%);
+  filter:blur(20px);will-change:transform;
+  animation:drift 90s ease-in-out infinite alternate;z-index:1;
+}
+@keyframes drift{
+  0%  {transform:translate3d(0,0,0) scale(1);}
+  100%{transform:translate3d(2.5%,-2%,0) scale(1.06);}
+}
+.stars{
+  position:absolute;inset:0;opacity:.55;z-index:2;
+  animation:twinkle 6s ease-in-out infinite alternate;
+  background-image:
+    radial-gradient(1px 1px at 12% 22%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 28% 64%,#f6e7d0 50%,transparent 60%),
+    radial-gradient(1px 1px at 44% 18%,#fff 50%,transparent 60%),
+    radial-gradient(1.4px 1.4px at 36% 82%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 6% 44%,#ffd9a8 50%,transparent 60%),
+    radial-gradient(1px 1px at 52% 38%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 18% 88%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 60% 12%,#fff 50%,transparent 60%);
+}
+.stars-2{position:absolute;inset:0;opacity:.3;z-index:2;
+  background-image:
+    radial-gradient(1px 1px at 12% 22%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 28% 64%,#f6e7d0 50%,transparent 60%),
+    radial-gradient(1px 1px at 44% 18%,#fff 50%,transparent 60%),
+    radial-gradient(1.4px 1.4px at 36% 82%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 6% 44%,#ffd9a8 50%,transparent 60%),
+    radial-gradient(1px 1px at 52% 38%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 18% 88%,#fff 50%,transparent 60%),
+    radial-gradient(1px 1px at 60% 12%,#fff 50%,transparent 60%);
+}
+@keyframes twinkle{0%{opacity:.35;}100%{opacity:.7;}}
+
+
+.vignette{
+  position:absolute;inset:0;pointer-events:none;z-index:9;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%),
+    linear-gradient(180deg,rgba(10,8,21,.6) 0%,transparent 18%,transparent 70%,rgba(5,3,9,.95) 100%);
+}
+
+/* Seamless hero→section gradient bridge */
+.hero-fade-out{
+  height:160px;
+  background:linear-gradient(to bottom, #050309 0%, rgba(8,6,18,0.74) 100%);
+  position:relative;z-index:3;
+}
+
+.hero-content{
+  position:relative;z-index:10;display:grid;grid-template-columns:1fr;
+  align-items:center;min-height:100vh;padding:0 8vw;will-change:transform;
+}
+.hero-text{max-width:46vw;min-width:380px;}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:11px;text-transform:uppercase;letter-spacing:.32em;
+  color:var(--cream-70);margin-bottom:28px;
+}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--cream-50);}
+.eyebrow .ember{color:var(--ember);}
+
+h1.tagline{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 144;
+  font-size:clamp(44px,6.2vw,88px);line-height:1.04;letter-spacing:-.012em;
+  color:var(--cream);margin:0 0 28px;text-wrap:balance;
+}
+h1.tagline em{font-style:italic;font-weight:300;}
+h1.tagline .ember-dot{color:var(--ember);font-style:normal;}
+
+.subcopy{
+  font-size:16px;line-height:1.55;color:var(--cream-70);
+  max-width:38ch;margin:0 0 38px;font-weight:300;
+}
+
+.cta-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+.cta{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 22px;border-radius:999px;color:var(--cream);
+  font-size:12.5px;text-transform:uppercase;letter-spacing:.2em;
+  transition:box-shadow 400ms ease,transform 300ms ease;
+}
+.cta:hover{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 0 36px rgba(212,98,42,.28),0 12px 40px -12px rgba(0,0,0,.6);
+  transform:translateY(-1px);
+}
+.cta .arrow{transition:transform 400ms ease;}
+.cta:hover .arrow{transform:translateX(3px);}
+
+.secondary-link{
+  font-size:12.5px;color:var(--cream-70);text-transform:uppercase;letter-spacing:.2em;
+  border-bottom:1px solid var(--cream-30);padding-bottom:3px;
+  transition:color 240ms ease,border-color 240ms ease;
+}
+.secondary-link:hover{color:var(--ember);border-color:var(--ember);}
+
+.meta-row{
+  position:absolute;left:8vw;right:8vw;bottom:36px;
+  display:flex;justify-content:space-between;align-items:end;gap:32px;
+  z-index:10;color:var(--cream-50);font-size:11px;
+  text-transform:uppercase;letter-spacing:.28em;
+}
+.meta-block{display:flex;flex-direction:column;gap:8px;}
+.meta-block .label{color:var(--cream-30);font-size:10px;}
+.meta-block .value{color:var(--cream-70);font-size:12px;letter-spacing:.22em;}
+.blink{color:var(--ember);animation:blink 1.6s steps(2) infinite;}
+@keyframes blink{50%{opacity:.2;}}
+
+.scroll-hint{
+  position:absolute;right:36px;bottom:24px;z-index:20;
+  color:var(--cream-50);font-size:10px;text-transform:uppercase;letter-spacing:.4em;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.scroll-hint .line{
+  width:1px;height:28px;
+  background:linear-gradient(180deg,var(--cream-50),transparent);
+  animation:scroll-pulse 2.4s ease-in-out infinite;
+}
+@keyframes scroll-pulse{
+  0%,100%{opacity:.3;transform:scaleY(.7);transform-origin:top;}
+  50%{opacity:1;transform:scaleY(1);}
+}
+
+/* ============================================================
+   SECTION DIVIDER
+   ============================================================ */
+.section-divider{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cream-15),transparent);
+}
+
+/* ============================================================
+   SHARED SECTION
+   ============================================================ */
+.section{position:relative;width:100%;overflow:hidden;padding:130px 8vw;}
+.section-content{position:relative;z-index:2;}
+
+.s-eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:11px;text-transform:uppercase;letter-spacing:.32em;
+  color:var(--cream-50);margin-bottom:22px;
+}
+.s-eyebrow::before{content:"";width:28px;height:1px;background:var(--ember);opacity:.6;}
+.s-num{color:var(--ember);font-family:'Fraunces',serif;font-size:12px;opacity:.8;}
+
+.s-heading{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 144;
+  font-size:clamp(30px,4.2vw,60px);line-height:1.08;letter-spacing:-.01em;
+  color:var(--cream);margin:0 0 24px;
+}
+.s-heading em{font-style:italic;color:var(--cream-70);}
+
+.s-sub{
+  font-size:16px;line-height:1.65;color:var(--cream-70);
+  max-width:48ch;margin:0 0 64px;font-weight:300;
+}
+
+/* ============================================================
+   SCROLL REVEAL — space-themed motion system
+   ============================================================ */
+
+/* Base: rises up from deep space, slight atmospheric blur */
+.reveal{
+  opacity:0;
+  transform:translateY(64px);
+  filter:blur(3px);
+  transition:opacity 1.0s var(--ease), transform 1.0s var(--ease), filter 0.9s var(--ease);
+}
+.reveal.in{opacity:1;transform:translateY(0);filter:blur(0);}
+
+/* Signal: headings materialise out of the void — blur + scale */
+.reveal.signal{
+  transform:translateY(72px) scale(0.96);
+  filter:blur(8px);
+  transition:opacity 1.1s var(--ease), transform 1.1s var(--ease), filter 1.0s var(--ease);
+}
+.reveal.signal.in{transform:translateY(0) scale(1);filter:blur(0);}
+
+/* Orbital-left: drifts in from port side with slight rotation */
+.reveal.from-left{
+  transform:translateX(-56px) translateY(24px) rotate(-1.5deg);
+  filter:blur(2px);
+  transition:opacity 1.0s var(--ease), transform 1.05s var(--ease), filter 0.9s var(--ease);
+}
+.reveal.from-left.in{transform:translateX(0) translateY(0) rotate(0deg);filter:blur(0);}
+
+/* Orbital-right: drifts in from starboard */
+.reveal.from-right{
+  transform:translateX(56px) translateY(24px) rotate(1.5deg);
+  filter:blur(2px);
+  transition:opacity 1.0s var(--ease), transform 1.05s var(--ease), filter 0.9s var(--ease);
+}
+.reveal.from-right.in{transform:translateX(0) translateY(0) rotate(0deg);filter:blur(0);}
+
+/* Launch: spring overshoot — like a craft breaking atmosphere */
+.reveal.scale-in{
+  opacity:0;
+  transform:scale(0.86) translateY(40px);
+  filter:blur(4px);
+  transition:opacity 1.0s var(--ease), transform 1.1s cubic-bezier(0.34,1.4,0.64,1), filter 0.9s var(--ease);
+}
+.reveal.scale-in.in{opacity:1;transform:scale(1) translateY(0);filter:blur(0);}
+
+/* Stagger delays — wider spacing for more dramatic cascade */
+.d1{transition-delay:.10s;}.d2{transition-delay:.22s;}.d3{transition-delay:.34s;}
+.d4{transition-delay:.46s;}.d5{transition-delay:.58s;}
+
+/* Constellation: stars pulse in, lines draw in */
+@keyframes star-pulse{
+  0%  {opacity:0;transform:scale(0);}
+  60% {transform:scale(1.6);}
+  100%{opacity:1;transform:scale(1);}
+}
+@keyframes draw-line{
+  from{stroke-dashoffset:400;opacity:0;}
+  to  {stroke-dashoffset:0;  opacity:1;}
+}
+.constellation-visual.in circle{
+  animation:star-pulse 0.7s cubic-bezier(0.34,1.4,0.64,1) both;
+  transform-box:fill-box;transform-origin:center;
+}
+.constellation-visual.in line{
+  stroke-dasharray:400;
+  animation:draw-line 1.8s var(--ease) both;
+}
+/* Stars appear first, then lines draw in after */
+.constellation-visual.in circle:nth-child(1) {animation-delay:.15s;}
+.constellation-visual.in circle:nth-child(2) {animation-delay:.25s;}
+.constellation-visual.in circle:nth-child(3) {animation-delay:.35s;}
+.constellation-visual.in circle:nth-child(4) {animation-delay:.45s;}
+.constellation-visual.in circle:nth-child(5) {animation-delay:.55s;}
+.constellation-visual.in circle:nth-child(6) {animation-delay:.65s;}
+.constellation-visual.in circle:nth-child(7) {animation-delay:.75s;}
+.constellation-visual.in circle:nth-child(8) {animation-delay:.85s;}
+.constellation-visual.in circle:nth-child(9) {animation-delay:.95s;}
+.constellation-visual.in circle:nth-child(10){animation-delay:1.05s;}
+.constellation-visual.in line:nth-child(n){animation-delay:1.1s;}
+.constellation-visual.in line:nth-child(odd){animation-delay:1.2s;}
+.constellation-visual.in line:nth-child(even){animation-delay:1.35s;}
+
+/* Gentle float after constellation reveals */
+@keyframes float-orbit{
+  0%,100%{transform:translateY(0px);}
+  50%    {transform:translateY(-10px);}
+}
+.constellation-visual.in svg{
+  animation:float-orbit 9s ease-in-out 2s infinite;
+}
+
+/* Section divider wipe — line grows outward from center */
+@keyframes divider-wipe{
+  from{background-size:0% 1px;background-position:center;}
+  to  {background-size:100% 1px;background-position:center;}
+}
+.section-divider{
+  animation:divider-wipe 1.2s var(--ease) both;
+  animation-play-state:paused;
+}
+.section-divider.in{animation-play-state:running;}
+
+/* ============================================================
+   02 RESEARCH / PRACTICE
+   ============================================================ */
+#research{
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%,rgba(42,74,110,.22),transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(122,42,58,.14),transparent 60%),
+    rgba(8,6,18,0.74);
+}
+.practice-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;margin-top:16px;
+}
+.practice-card{
+  padding:48px 36px;border-top:1px solid var(--cream-15);
+  transition:background 400ms ease;
+}
+.practice-card:hover{background:rgba(255,255,255,.02);}
+.p-num{
+  font-family:'Fraunces',serif;font-size:11px;color:var(--ember);opacity:.7;
+  letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px;
+}
+.practice-card h3{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 72;
+  font-size:24px;letter-spacing:-.01em;color:var(--cream);
+  margin:0 0 14px;line-height:1.2;
+}
+.practice-card p{font-size:14px;line-height:1.65;color:var(--cream-50);font-weight:300;}
+.p-cta{
+  display:inline-flex;align-items:center;gap:8px;margin-top:28px;
+  font-size:11px;text-transform:uppercase;letter-spacing:.22em;color:var(--cream-50);
+  border-bottom:1px solid var(--cream-15);padding-bottom:3px;
+  transition:color 240ms,border-color 240ms;cursor:pointer;
+}
+.practice-card:hover .p-cta{color:var(--ember);border-color:var(--ember);}
+
+/* ============================================================
+   ARCHIVE
+   ============================================================ */
+#archive{
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 30%,rgba(122,42,58,.18),transparent 65%),
+    radial-gradient(ellipse 50% 60% at 10% 70%,rgba(42,74,110,.14),transparent 60%),
+    rgba(6,4,14,0.78);
+}
+.archive-header{
+  display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end;margin-bottom:24px;
+}
+.archive-list{list-style:none;}
+.archive-item{
+  display:grid;grid-template-columns:72px 1fr 28px;
+  align-items:baseline;gap:28px;padding:26px 0;
+  border-top:1px solid var(--cream-15);cursor:pointer;
+  transition:padding-left 300ms ease;
+}
+.archive-item:last-child{border-bottom:1px solid var(--cream-15);}
+.archive-item:hover{padding-left:8px;}
+.arc-year{
+  font-family:'Fraunces',serif;font-size:12px;color:var(--ember);opacity:.65;letter-spacing:.1em;
+}
+.arc-title{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 72;
+  font-size:20px;letter-spacing:-.008em;color:var(--cream-70);
+  transition:color 300ms ease;line-height:1.3;
+}
+.arc-title span{
+  display:block;font-family:'Geist',sans-serif;font-size:11px;
+  text-transform:uppercase;letter-spacing:.22em;color:var(--cream-30);
+  font-weight:300;margin-top:5px;
+}
+.archive-item:hover .arc-title{color:var(--cream);}
+.arc-arrow{color:var(--cream-30);font-size:14px;transition:transform 300ms,color 300ms;}
+.archive-item:hover .arc-arrow{transform:translateX(4px);color:var(--ember);}
+
+/* ============================================================
+   DISPATCHES
+   ============================================================ */
+#dispatches{
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%,rgba(122,42,58,.22),transparent 60%),
+    radial-gradient(ellipse 40% 60% at 20% 100%,rgba(42,74,110,.18),transparent 50%),
+    rgba(8,6,18,0.74);
+}
+.dispatches-layout{
+  display:grid;grid-template-columns:1fr 1.25fr;gap:80px;align-items:start;
+}
+.dispatch-subscribe{position:sticky;top:120px;}
+.dispatch-form{display:flex;flex-direction:column;gap:12px;margin-top:36px;}
+.dispatch-form input{
+  background:rgba(255,255,255,.04);border:1px solid var(--cream-15);
+  border-radius:999px;padding:14px 20px;color:var(--cream);
+  font-family:'Geist',sans-serif;font-size:13px;font-weight:300;
+  outline:none;transition:border-color 300ms,background 300ms;
+}
+.dispatch-form input::placeholder{color:var(--cream-30);}
+.dispatch-form input:focus{border-color:rgba(212,98,42,.4);background:rgba(255,255,255,.06);}
+.dispatch-form button{
+  background:linear-gradient(135deg,rgba(212,98,42,.3),rgba(122,42,58,.3));
+  border:1px solid rgba(212,98,42,.3);border-radius:999px;padding:14px 28px;
+  color:var(--cream);font-family:'Geist',sans-serif;font-size:11.5px;
+  font-weight:400;text-transform:uppercase;letter-spacing:.2em;
+  cursor:pointer;transition:background 300ms,box-shadow 300ms;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.dispatch-form button:hover{
+  background:linear-gradient(135deg,rgba(212,98,42,.45),rgba(122,42,58,.45));
+  box-shadow:0 0 28px rgba(212,98,42,.22);
+}
+.dispatch-entry{padding:32px 0;border-top:1px solid var(--cream-15);}
+.dispatch-entry:last-child{border-bottom:1px solid var(--cream-15);}
+.d-meta{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.d-issue{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(--ember);opacity:.8;font-family:'Fraunces',serif;}
+.d-date{font-size:10px;text-transform:uppercase;letter-spacing:.2em;color:var(--cream-30);}
+.d-dot{width:3px;height:3px;border-radius:50%;background:var(--cream-30);}
+.dispatch-entry h3{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 72;
+  font-size:22px;letter-spacing:-.008em;color:var(--cream);margin:0 0 10px;line-height:1.25;
+}
+.dispatch-entry p{font-size:14px;line-height:1.65;color:var(--cream-50);}
+.d-read{
+  display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+  font-size:11px;text-transform:uppercase;letter-spacing:.22em;color:var(--cream-50);
+  border-bottom:1px solid var(--cream-15);padding-bottom:2px;
+  transition:color 240ms,border-color 240ms;
+}
+.d-read:hover{color:var(--ember);border-color:var(--ember);}
+
+/* ============================================================
+   03 STUDIO / CONSTELLATIONS
+   ============================================================ */
+#studio{
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 40%,rgba(42,74,110,.26),transparent 65%),
+    radial-gradient(ellipse 50% 40% at 5% 80%,rgba(122,42,58,.18),transparent 55%),
+    rgba(10,8,22,0.76);
+}
+.studio-layout{display:grid;grid-template-columns:1.25fr 1fr;gap:80px;align-items:start;}
+.values-list{list-style:none;margin-top:48px;}
+.value-item{
+  display:flex;gap:24px;padding:24px 0;
+  border-top:1px solid var(--cream-15);align-items:flex-start;
+}
+.v-num{
+  font-family:'Fraunces',serif;font-size:12px;color:var(--ember);
+  opacity:.7;min-width:32px;padding-top:2px;
+}
+.v-body h4{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 36;
+  font-size:18px;color:var(--cream);margin:0 0 8px;
+}
+.v-body p{font-size:14px;line-height:1.6;color:var(--cream-50);}
+
+.constellation-visual{position:relative;height:300px;margin-top:12px;}
+.constellation-visual svg{width:100%;height:100%;}
+
+.studio-stats{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:32px;}
+.stat-block{padding:32px 28px;border-top:1px solid var(--cream-15);}
+.stat-block .s-val{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 72;
+  font-size:40px;letter-spacing:-.02em;color:var(--cream);line-height:1;margin-bottom:8px;
+}
+.stat-block .s-val em{font-style:italic;color:var(--ember);}
+.stat-block .s-label{font-size:10px;text-transform:uppercase;letter-spacing:.28em;color:var(--cream-30);}
+
+/* ============================================================
+   04 CONTACT
+   ============================================================ */
+#contact{
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 100%,rgba(122,42,58,.24),transparent 55%),
+    radial-gradient(ellipse 50% 50% at 30% 20%,rgba(42,74,110,.20),transparent 60%),
+    rgba(6,4,14,0.78);
+  padding-bottom:160px;
+}
+.contact-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:80px;align-items:start;}
+.contact-aside{position:sticky;top:120px;}
+.c-tagline{
+  font-family:'Fraunces',serif;font-weight:300;font-variation-settings:"opsz" 72;
+  font-size:17px;line-height:1.6;color:var(--cream-70);margin-top:24px;max-width:28ch;
+}
+.contact-detail{margin-top:40px;display:flex;flex-direction:column;gap:20px;}
+.c-line{display:flex;flex-direction:column;gap:4px;}
+.c-label-sm{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(--cream-30);}
+.c-val{font-size:14px;color:var(--cream-70);letter-spacing:.02em;}
+
+.contact-form{display:flex;flex-direction:column;gap:16px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-field{display:flex;flex-direction:column;gap:8px;}
+.form-field label{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(--cream-30);}
+.form-field input,
+.form-field select,
+.form-field textarea{
+  background:rgba(255,255,255,.03);border:1px solid var(--cream-15);
+  border-radius:12px;padding:14px 18px;color:var(--cream);
+  font-family:'Geist',sans-serif;font-size:14px;font-weight:300;
+  outline:none;transition:border-color 300ms,background 300ms;
+  resize:none;-webkit-appearance:none;appearance:none;
+}
+.form-field textarea{min-height:140px;line-height:1.6;}
+.form-field input::placeholder,.form-field textarea::placeholder{color:var(--cream-30);}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{
+  border-color:rgba(212,98,42,.4);background:rgba(255,255,255,.05);
+}
+.form-field select option{background:#1E1638;color:var(--cream);}
+.form-submit{
+  background:linear-gradient(135deg,rgba(212,98,42,.25),rgba(122,42,58,.25));
+  border:1px solid rgba(212,98,42,.25);border-radius:999px;padding:16px 36px;
+  color:var(--cream);font-family:'Geist',sans-serif;font-size:12px;font-weight:400;
+  text-transform:uppercase;letter-spacing:.24em;cursor:pointer;
+  transition:background 300ms,box-shadow 300ms,transform 300ms;
+  display:flex;align-items:center;gap:10px;align-self:flex-start;
+}
+.form-submit:hover{
+  background:linear-gradient(135deg,rgba(212,98,42,.42),rgba(122,42,58,.42));
+  box-shadow:0 0 36px rgba(212,98,42,.22),0 12px 40px -12px rgba(0,0,0,.6);
+  transform:translateY(-1px);
+}
+.form-submit .arrow{transition:transform 300ms;}
+.form-submit:hover .arrow{transform:translateX(3px);}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{
+  padding:40px 8vw;border-top:1px solid var(--cream-15);
+  display:flex;justify-content:space-between;align-items:center;
+  gap:32px;background:rgba(3,2,8,0.90);flex-wrap:wrap;
+}
+.footer-mark{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Fraunces',serif;font-size:14px;letter-spacing:.04em;color:var(--cream-70);
+}
+.footer-links{display:flex;gap:28px;}
+.footer-links a{
+  font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--cream-30);
+  transition:color 220ms;
+}
+.footer-links a:hover{color:var(--cream-70);}
+.footer-copy{font-size:10px;text-transform:uppercase;letter-spacing:.22em;color:var(--cream-30);}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:1100px){
+  .practice-grid{grid-template-columns:1fr 1fr;}
+  .studio-layout{grid-template-columns:1fr;}
+  .dispatches-layout{grid-template-columns:1fr;}
+  .dispatch-subscribe{position:static;}
+  .archive-header{grid-template-columns:1fr;gap:24px;}
+  .contact-layout{grid-template-columns:1fr;}
+  .contact-aside{position:static;}
+}
+@media(max-width:900px){
+  .hero-text{max-width:86vw;min-width:0;}
+  .nav-links{display:none;}
+  .side-rail,.nav-index,.meta-row{display:none;}
+  h1.tagline{font-size:clamp(40px,11vw,64px);}
+  .practice-grid{grid-template-columns:1fr;}
+  .section{padding:80px 6vw;}
+  .form-row{grid-template-columns:1fr;}
+  .archive-item{grid-template-columns:56px 1fr 24px;gap:16px;}
+  .footer{flex-direction:column;align-items:flex-start;gap:24px;}
+  .footer-links{flex-wrap:wrap;gap:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     COSMIC LOADER
+     ============================================================ -->
+<div id="loader" aria-label="Loading Cosmic Solutions" role="status">
+  <div class="ld-nebula"></div>
+  <div class="ld-stars"></div>
+  <div class="ld-stars ld-stars-2"></div>
+
+  <!-- Meteor shower -->
+  <div class="ld-meteors" aria-hidden="true">
+    <span class="ld-m"></span><span class="ld-m"></span><span class="ld-m"></span>
+    <span class="ld-m"></span><span class="ld-m"></span><span class="ld-m"></span>
+    <span class="ld-m"></span><span class="ld-m"></span><span class="ld-m"></span>
+    <span class="ld-m"></span><span class="ld-m"></span><span class="ld-m"></span>
+    <span class="ld-m"></span><span class="ld-m"></span><span class="ld-m"></span>
+    <span class="ld-m"></span>
+  </div>
+
+  <!-- Central content -->
+  <div class="ld-center">
+    <!-- Planet with dual orbital rings -->
+    <div class="ld-planet-wrap" aria-hidden="true">
+      <div class="ld-planet"></div>
+      <div class="ld-orb-1"><div class="ld-orb-1-ring"></div></div>
+      <div class="ld-orb-2"><div class="ld-orb-2-ring"></div></div>
+    </div>
+
+    <p class="ld-name">Cosmic Solutions</p>
+    <p class="ld-eyebrow">Est. Low Earth Orbit · MMXXVI</p>
+
+    <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
+
+    <p class="ld-status">Establishing signal <span class="ld-blink">▌</span></p>
+  </div>
+</div>
+
+<!-- ============================================================
+     FIXED CHROME
+     ============================================================ -->
+<nav class="nav-wrap glass" aria-label="Primary">
+  <div class="nav-mark">
+    <span class="nav-mark-glyph" aria-hidden="true"></span>
+    <span>Cosmic Solutions</span>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="#research">Research</a>
+    <a class="nav-link" href="#archive">Archive</a>
+    <a class="nav-link" href="#dispatches">Dispatches</a>
+    <a class="nav-link" href="#studio">Studio</a>
+  </div>
+  <a class="nav-cta" href="#contact">
+    <span class="dot" aria-hidden="true"></span>
+    <span>Contact</span>
+  </a>
+</nav>
+
+<div class="side-rail" aria-hidden="true">
+  <span>Vol. IX</span>
+  <span class="tick"></span>
+  <span>Field Guide for Cosmic Solutions</span>
+</div>
+
+<nav class="nav-index" id="navIndex" aria-label="Page sections">
+  <a class="idx-item active" href="#origin"><span class="num">01</span><span>Origin</span></a>
+  <a class="idx-item" href="#research"><span class="num">02</span><span>Practice</span></a>
+  <a class="idx-item" href="#studio"><span class="num">03</span><span>Constellations</span></a>
+  <a class="idx-item" href="#contact"><span class="num">04</span><span>Contact</span></a>
+</nav>
+
+<!-- ============================================================
+     01 ORIGIN — HERO
+     ============================================================ -->
+<section id="origin" class="stage" data-nav="01">
+
+  <video class="bg-video" autoplay loop muted playsinline>
+    <source src="uploads/hf_20260505_220336_c2ad499a-fb77-4478-8162-d762f055cfc3.mp4" type="video/mp4">
+  </video>
+
+  <div class="nebula-layer"></div>
+  <div class="stars"></div>
+  <div class="stars-2" id="starsParallax"></div>
+
+
+  <div class="vignette"></div>
+
+  <div class="hero-content" id="heroContent">
+    <div class="hero-text">
+      <div class="eyebrow">
+        <span>Est. Low Earth Orbit · MMXXVI</span>
+        <span class="ember">●</span>
+      </div>
+      <h1 class="tagline">
+        <span style="display:block">Solutions written</span>
+        <span style="display:block"><em>in the stars</em><span class="ember-dot">.</span></span>
+      </h1>
+      <p class="subcopy">Cosmic Solutions is a strategy studio for problems too big for the room — charting paths between the artifact and the orbit, the marble and the molten core.</p>
+      <div class="cta-row">
+        <a class="cta glass" href="#research">
+          <span>Chart your orbit</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="secondary-link" href="#dispatches">Read our manifesto</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-block">
+      <span class="label">Coordinates</span>
+      <span class="value" style="font-feature-settings:'tnum' 1">41°24′N · 02°10′E <span class="blink">▌</span></span>
+    </div>
+    <div class="meta-block" style="align-items:center;text-align:center">
+      <span class="label">Volume</span>
+      <span class="value">Brief No. 014 — Solutions &amp; Solar Winds</span>
+    </div>
+    <div class="meta-block" style="align-items:flex-end;text-align:right">
+      <span class="label">Transmission</span>
+      <span class="value">Signal Live · 7.83 Hz</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <span class="line"></span>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     02 PRACTICE — RESEARCH
+     ============================================================ -->
+<div class="hero-fade-out"></div>
+<section id="research" class="section" data-nav="02">
+  <div class="section-content">
+
+    <div class="s-eyebrow reveal from-left">
+      <span class="s-num">02</span>
+      <span>The Practice</span>
+    </div>
+
+    <h2 class="s-heading reveal signal d1">
+      Navigating<br><em>the unknown.</em>
+    </h2>
+
+    <p class="s-sub reveal d2">
+      We chart the unmapped. A studio at the intersection of strategy and the sublime — translating complexity into clarity, and ambiguity into decisive action.
+    </p>
+
+    <div class="practice-grid">
+      <div class="practice-card reveal from-left d1">
+        <div class="p-num">01 — Method</div>
+        <h3>Signal Mapping</h3>
+        <p>Identifying weak signals before they become obvious — scanning the cultural, technological, and social horizon to surface patterns before they coalesce into trends.</p>
+        <span class="p-cta">Explore method <span>→</span></span>
+      </div>
+      <div class="practice-card reveal d2">
+        <div class="p-num">02 — Method</div>
+        <h3>Orbital Strategy</h3>
+        <p>Long-arc thinking for institutions built to last. We work at the intersection of immediate decisions and generational consequences — designing for the orbit, not just the launch.</p>
+        <span class="p-cta">Explore method <span>→</span></span>
+      </div>
+      <div class="practice-card reveal from-right d3">
+        <div class="p-num">03 — Method</div>
+        <h3>The Brief</h3>
+        <p>Distilled intelligence for decisive action. Every engagement ends with a brief: a precise, navigable document that serves as compass for the years ahead.</p>
+        <span class="p-cta">Explore method <span>→</span></span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     ARCHIVE
+     ============================================================ -->
+<div class="section-divider"></div>
+<section id="archive" class="section" data-nav="02">
+  <div class="section-content">
+
+    <div class="archive-header">
+      <div>
+        <div class="s-eyebrow reveal from-left">
+          <span class="s-num">Field</span>
+          <span>Archive</span>
+        </div>
+        <h2 class="s-heading reveal signal d1">
+          Notes from<br><em>the edge.</em>
+        </h2>
+      </div>
+      <p class="s-sub reveal d2" style="margin-bottom:0">
+        A record of completed engagements, published artefacts, and field research from across our practice.
+      </p>
+    </div>
+
+    <ul class="archive-list">
+      <li class="archive-item reveal from-left d1">
+        <span class="arc-year">2025</span>
+        <div class="arc-title">Project Perihelion<span>Brand Identity &amp; Narrative Strategy</span></div>
+        <span class="arc-arrow">→</span>
+      </li>
+      <li class="archive-item reveal from-left d2">
+        <span class="arc-year">2025</span>
+        <div class="arc-title">The Dark Matter Report<span>Futures Research &amp; Scenario Planning</span></div>
+        <span class="arc-arrow">→</span>
+      </li>
+      <li class="archive-item reveal from-left d3">
+        <span class="arc-year">2024</span>
+        <div class="arc-title">Constellation Series<span>Editorial Design &amp; Publication</span></div>
+        <span class="arc-arrow">→</span>
+      </li>
+      <li class="archive-item reveal from-left d4">
+        <span class="arc-year">2024</span>
+        <div class="arc-title">Low Earth Operations<span>Strategic Brief &amp; Communications</span></div>
+        <span class="arc-arrow">→</span>
+      </li>
+      <li class="archive-item reveal from-left d5">
+        <span class="arc-year">2024</span>
+        <div class="arc-title">Signal &amp; Noise<span>Exhibition Design &amp; Curation</span></div>
+        <span class="arc-arrow">→</span>
+      </li>
+    </ul>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     DISPATCHES
+     ============================================================ -->
+<div class="section-divider"></div>
+<section id="dispatches" class="section" data-nav="02">
+  <div class="section-content">
+
+    <div class="s-eyebrow reveal from-left">
+      <span class="s-num">Field</span>
+      <span>Dispatches</span>
+    </div>
+
+    <h2 class="s-heading reveal signal d1">
+      Signals from<br><em>the field.</em>
+    </h2>
+
+    <div class="dispatches-layout">
+      <div class="dispatch-subscribe reveal d2">
+        <p class="s-sub" style="margin-bottom:0;max-width:32ch">
+          Irregular transmissions on strategy, culture, and the space between. Received by a small, curious audience.
+        </p>
+        <div class="dispatch-form">
+          <input type="email" id="subEmail" placeholder="Your signal address" />
+          <button type="button" id="subBtn">
+            <span>Tune in</span>
+            <span>→</span>
+          </button>
+        </div>
+        <p style="margin-top:16px;font-size:11px;color:var(--cream-30);letter-spacing:.12em;line-height:1.6">
+          No noise. No cadence. Only when there is something worth transmitting.
+        </p>
+      </div>
+
+      <div class="dispatch-feed">
+        <div class="dispatch-entry reveal from-right d2">
+          <div class="d-meta">
+            <span class="d-issue">No. 014</span>
+            <span class="d-dot"></span>
+            <span class="d-date">April 2025</span>
+          </div>
+          <h3>The Cartography of Uncertainty</h3>
+          <p>On the maps we draw when the terrain is unmapped — and why the act of charting is itself a strategy.</p>
+          <a class="d-read" href="#">Read dispatch <span>→</span></a>
+        </div>
+        <div class="dispatch-entry reveal from-right d3">
+          <div class="d-meta">
+            <span class="d-issue">No. 013</span>
+            <span class="d-dot"></span>
+            <span class="d-date">February 2025</span>
+          </div>
+          <h3>Slow Futures</h3>
+          <p>A meditation on the institutions built for centuries rather than quarters, and what we can learn from their long arcs.</p>
+          <a class="d-read" href="#">Read dispatch <span>→</span></a>
+        </div>
+        <div class="dispatch-entry reveal from-right d4">
+          <div class="d-meta">
+            <span class="d-issue">No. 012</span>
+            <span class="d-dot"></span>
+            <span class="d-date">December 2024</span>
+          </div>
+          <h3>The Artifact &amp; The Orbit</h3>
+          <p>On the tension between the tangible and the systemic — how objects anchor strategies, and strategies animate objects.</p>
+          <a class="d-read" href="#">Read dispatch <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     03 STUDIO / CONSTELLATIONS
+     ============================================================ -->
+<div class="section-divider"></div>
+<section id="studio" class="section" data-nav="03">
+  <div class="section-content">
+
+    <div class="s-eyebrow reveal from-left">
+      <span class="s-num">03</span>
+      <span>The Constellation</span>
+    </div>
+
+    <h2 class="s-heading reveal signal d1">
+      A small studio.<br><em>An infinite field.</em>
+    </h2>
+
+    <div class="studio-layout">
+      <div class="studio-main">
+        <p class="s-sub" style="margin-bottom:0">
+          Cosmic Solutions is a strategy studio founded on the belief that the most important problems resist easy framing. We work with institutions, founders, and cultural organisations navigating the space between where they are and where they need to be.
+        </p>
+        <ul class="values-list">
+          <li class="value-item reveal from-left d1">
+            <span class="v-num">01</span>
+            <div class="v-body">
+              <h4>Precision over volume</h4>
+              <p>We take fewer engagements, and go deeper. The brief is always small enough to act on and large enough to matter.</p>
+            </div>
+          </li>
+          <li class="value-item reveal from-left d2">
+            <span class="v-num">02</span>
+            <div class="v-body">
+              <h4>The long view</h4>
+              <p>We design for decades, not quarters. Our work functions as a compass long after we have left the room.</p>
+            </div>
+          </li>
+          <li class="value-item reveal from-left d3">
+            <span class="v-num">03</span>
+            <div class="v-body">
+              <h4>Craft as rigour</h4>
+              <p>Every document, deck, and artefact we produce is made with the same care as the strategy it contains.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="studio-aside">
+        <div class="constellation-visual reveal scale-in d2">
+          <svg viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="120" cy="60"  r="3"   fill="#F4EFE8" opacity=".9"/>
+            <circle cx="240" cy="90"  r="2"   fill="#F4EFE8" opacity=".6"/>
+            <circle cx="310" cy="50"  r="2.5" fill="#D4622A" opacity=".8"/>
+            <circle cx="80"  cy="160" r="2"   fill="#F4EFE8" opacity=".5"/>
+            <circle cx="190" cy="200" r="3.5" fill="#F4EFE8" opacity=".9"/>
+            <circle cx="330" cy="160" r="2"   fill="#F4EFE8" opacity=".6"/>
+            <circle cx="150" cy="270" r="2"   fill="#D4622A" opacity=".7"/>
+            <circle cx="270" cy="250" r="3"   fill="#F4EFE8" opacity=".8"/>
+            <circle cx="60"  cy="260" r="2"   fill="#F4EFE8" opacity=".4"/>
+            <circle cx="360" cy="280" r="2"   fill="#F4EFE8" opacity=".5"/>
+            <line x1="120" y1="60"  x2="240" y2="90"  stroke="rgba(244,239,232,.15)" stroke-width="1"/>
+            <line x1="240" y1="90"  x2="310" y2="50"  stroke="rgba(244,239,232,.10)" stroke-width="1"/>
+            <line x1="120" y1="60"  x2="80"  y2="160" stroke="rgba(244,239,232,.12)" stroke-width="1"/>
+            <line x1="80"  y1="160" x2="190" y2="200" stroke="rgba(244,239,232,.15)" stroke-width="1"/>
+            <line x1="190" y1="200" x2="330" y2="160" stroke="rgba(244,239,232,.10)" stroke-width="1"/>
+            <line x1="240" y1="90"  x2="190" y2="200" stroke="rgba(244,239,232,.12)" stroke-width="1"/>
+            <line x1="190" y1="200" x2="150" y2="270" stroke="rgba(212,98,42,.25)"   stroke-width="1"/>
+            <line x1="190" y1="200" x2="270" y2="250" stroke="rgba(212,98,42,.20)"   stroke-width="1"/>
+            <line x1="150" y1="270" x2="60"  y2="260" stroke="rgba(244,239,232,.08)" stroke-width="1"/>
+            <line x1="270" y1="250" x2="360" y2="280" stroke="rgba(244,239,232,.08)" stroke-width="1"/>
+            <circle cx="120" cy="60"  r="10" fill="rgba(244,239,232,.04)"/>
+            <circle cx="190" cy="200" r="16" fill="rgba(212,98,42,.06)"/>
+            <circle cx="310" cy="50"  r="12" fill="rgba(212,98,42,.06)"/>
+          </svg>
+        </div>
+
+        <div class="studio-stats reveal scale-in d3">
+          <div class="stat-block">
+            <div class="s-val">IX<em>·</em></div>
+            <div class="s-label">Years in orbit</div>
+          </div>
+          <div class="stat-block">
+            <div class="s-val">47<em>+</em></div>
+            <div class="s-label">Engagements</div>
+          </div>
+          <div class="stat-block">
+            <div class="s-val">12<em>·</em></div>
+            <div class="s-label">Active partners</div>
+          </div>
+          <div class="stat-block">
+            <div class="s-val">3<em>·</em></div>
+            <div class="s-label">Continents</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     04 CONTACT
+     ============================================================ -->
+<div class="section-divider"></div>
+<section id="contact" class="section" data-nav="04">
+  <div class="section-content">
+
+    <div class="s-eyebrow reveal from-left">
+      <span class="s-num">04</span>
+      <span>Contact</span>
+    </div>
+
+    <h2 class="s-heading reveal signal d1">
+      Begin your<br><em>orbit.</em>
+    </h2>
+
+    <div class="contact-layout">
+      <div class="contact-aside reveal from-left d2">
+        <p class="c-tagline">
+          For new engagements, collaborations, or to simply say hello — we read every message and respond thoughtfully.
+        </p>
+        <div class="contact-detail">
+          <div class="c-line">
+            <span class="c-label-sm">Signal</span>
+            <span class="c-val">hello@cosmicsolutions.co</span>
+          </div>
+          <div class="c-line">
+            <span class="c-label-sm">Station</span>
+            <span class="c-val">Low Earth Orbit, Sector VII</span>
+          </div>
+          <div class="c-line">
+            <span class="c-label-sm">Response</span>
+            <span class="c-val">Within two orbital cycles</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap reveal from-right d3">
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cf-name">Name</label>
+              <input type="text" id="cf-name" placeholder="Your name" />
+            </div>
+            <div class="form-field">
+              <label for="cf-email">Signal address</label>
+              <input type="email" id="cf-email" placeholder="your@signal.co" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="cf-org">Organisation</label>
+            <input type="text" id="cf-org" placeholder="Where are you transmitting from?" />
+          </div>
+          <div class="form-field">
+            <label for="cf-type">Engagement type</label>
+            <select id="cf-type">
+              <option value="" disabled selected>Select a frequency</option>
+              <option>Brand &amp; Identity Strategy</option>
+              <option>Futures Research</option>
+              <option>Editorial &amp; Publication</option>
+              <option>Strategic Brief</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="cf-msg">Transmission</label>
+            <textarea id="cf-msg" placeholder="Tell us about the problem you are navigating…"></textarea>
+          </div>
+          <button type="submit" class="form-submit">
+            <span>Send transmission</span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer-mark">
+    <span class="nav-mark-glyph" aria-hidden="true"></span>
+    <span>Cosmic Solutions</span>
+  </div>
+  <div class="footer-links">
+    <a href="#research">Research</a>
+    <a href="#archive">Archive</a>
+    <a href="#dispatches">Dispatches</a>
+    <a href="#studio">Studio</a>
+  </div>
+  <span class="footer-copy">© MMXXVI · Est. Low Earth Orbit</span>
+</footer>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── Cosmic loader dismissal ── */
+  var loaderStart   = Date.now();
+  var minDuration   = 2600; // ms — long enough to enjoy the meteor shower
+  var pageLoaded    = false;
+
+  function hideLoader() {
+    if (!pageLoaded) return;
+    var elapsed   = Date.now() - loaderStart;
+    var remaining = Math.max(0, minDuration - elapsed);
+    setTimeout(function () {
+      var loader = document.getElementById('loader');
+      if (!loader) return;
+      loader.classList.add('ld-out');
+      setTimeout(function () { loader.remove(); }, 1200);
+    }, remaining);
+  }
+
+  window.addEventListener('load', function () { pageLoaded = true; hideLoader(); });
+  // Hard fallback — never block for more than 6 s
+  setTimeout(function () { pageLoaded = true; hideLoader(); }, 6000);
+
+  /* ── Scroll reveal ── */
+  const revealEls = document.querySelectorAll('.reveal, .section-divider');
+  const revealObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+  revealEls.forEach(function (el) { revealObs.observe(el); });
+
+  /* ── Section / nav-index active state ── */
+  var sections  = document.querySelectorAll('section[data-nav]');
+  var idxItems  = document.querySelectorAll('.idx-item');
+  var navLinks  = document.querySelectorAll('.nav-link');
+
+  var secObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var nav = e.target.dataset.nav;
+      var id  = e.target.id;
+
+      idxItems.forEach(function (item) {
+        item.classList.remove('active');
+        if (item.querySelector('.num').textContent === nav) {
+          item.classList.add('active');
+        }
+      });
+
+      navLinks.forEach(function (link) {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + id) {
+          link.classList.add('active');
+        }
+      });
+    });
+  }, { threshold: 0, rootMargin: '-38% 0px -38% 0px' });
+  sections.forEach(function (s) { secObs.observe(s); });
+
+  /* ── Hero parallax ── */
+  var heroContent = document.getElementById('heroContent');
+  var starsP      = document.getElementById('starsParallax');
+  var heroSection = document.getElementById('origin');
+
+  var scrollY = 0, mouseX = 0, mouseY = 0, raf = false, heroVis = true;
+
+  new IntersectionObserver(function (e) { heroVis = e[0].isIntersecting; })
+      .observe(heroSection);
+
+  function applyParallax() {
+    raf = false;
+    if (!heroVis) return;
+    var bY = -scrollY * 0.96;
+    var tY = -scrollY * 0.55;
+    if (heroContent) heroContent.style.transform = 'translate3d(' + (mouseX * -0.3) + 'px,' + tY + 'px,0)';
+    if (starsP)      starsP.style.transform      = 'translate(' + (mouseX * 0.4) + 'px,' + (mouseY * 0.4) + 'px)';
+  }
+
+  window.addEventListener('scroll', function () {
+    scrollY = window.scrollY || 0;
+    if (!raf) { raf = true; requestAnimationFrame(applyParallax); }
+  }, { passive: true });
+
+  window.addEventListener('mousemove', function (e) {
+    mouseX = (e.clientX / window.innerWidth  - 0.5) * 8;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 8;
+    if (!raf && heroVis) { raf = true; requestAnimationFrame(applyParallax); }
+  });
+
+  /* ── Contact form feedback ── */
+  var cForm = document.getElementById('contactForm');
+  if (cForm) {
+    cForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = cForm.querySelector('.form-submit');
+      btn.innerHTML = '<span>Transmission sent ✓</span>';
+      btn.style.background = 'linear-gradient(135deg,rgba(42,120,74,.4),rgba(20,80,50,.4))';
+      btn.style.borderColor = 'rgba(42,180,74,.3)';
+    });
+  }
+
+  /* ── Newsletter subscribe feedback ── */
+  var subBtn   = document.getElementById('subBtn');
+  var subEmail = document.getElementById('subEmail');
+  if (subBtn && subEmail) {
+    subBtn.addEventListener('click', function () {
+      if (subEmail.value.includes('@')) {
+        subBtn.innerHTML = '<span>Signal received ✓</span>';
+        subBtn.style.background = 'linear-gradient(135deg,rgba(42,120,74,.4),rgba(20,80,50,.4))';
+        subEmail.value = '';
+      }
+    });
+  }
+
+}());
+</script>
+</body>
+</html>
