@@ -254,7 +254,7 @@
    RESET
    ============================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
 body{
   background: url('bg.png') center/cover var(--bg);
   color:var(--cream);
@@ -930,6 +930,9 @@ h1.tagline .ember-dot{color:var(--ember);font-style:normal;}
   .nav-wrap{top:14px;padding:7px 7px 7px 16px;}
   .nav-cta{padding:8px 14px;font-size:10.5px;}
 
+  /* Collapse the fade bridge so content appears sooner after the hero */
+  .hero-fade-out{height:32px;}
+
   /* Hero */
   .hero-content{padding:0 5vw;padding-top:80px;align-items:flex-start;}
   .hero-text{max-width:100%;padding-bottom:40px;}
@@ -939,8 +942,9 @@ h1.tagline .ember-dot{color:var(--ember);font-style:normal;}
   .cta{padding:13px 18px;font-size:12px;}
   .scroll-hint{display:none;}
 
-  /* Sections */
+  /* Sections — first section after hero gets tighter top padding */
   .section{padding:60px 5vw;}
+  #research{padding-top:32px;}
   .s-heading{font-size:clamp(26px,8vw,40px);}
   .s-sub{font-size:15px;margin-bottom:44px;}
 
